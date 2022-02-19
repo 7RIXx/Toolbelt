@@ -1,6 +1,6 @@
 #!/bin/python3
 
-## A quick enumerator to scan for subdomains
+## A quick enumerator to scan for subdomains ; BASED ON A SCRIPT BY RILEY KIDD
 
 ## TO DO LIST: Incorporate a check for valid domain name, maybe send a quick GET when checking the user input
 
