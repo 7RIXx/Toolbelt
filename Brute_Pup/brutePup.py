@@ -449,6 +449,7 @@ def live_logging(targets):
 	for site in living:
 		lf.write(str(site) + '\n')
 
+# build targetting list for further use
 def target_logging(targets):
 	targetting = targets
 	slice_from = len(ssl_prefix)
@@ -472,7 +473,6 @@ def snapshot(snap_targets):
 			os.system(cmd)
 		except KeyboardInterrupt:
 			print('\n\nUser Interruption\n\n')
-			exit()
 		except:
 			print('''\n\n
 		
@@ -486,7 +486,7 @@ def snapshot(snap_targets):
 
 		
 		
-		
+# bust the directories
 def dirbusting(site_targets,dir_targets):
 	sites = site_targets
 	dirs = dir_targets
