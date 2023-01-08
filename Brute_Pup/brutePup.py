@@ -226,9 +226,9 @@ if args.threads is not None:
 if args.snap:
 	snap = True
 if args.secure is not None:
-	if args.secure == 0:
+	if args.secure == '0':
 		ssl_prefix = 'http' + '://'
-	elif args.secure == 1:
+	elif args.secure == '1':
 		ssl_prefix == 'https' + '://'
 	else:
 		ssl_prefix == str(args.secure) + '://'
