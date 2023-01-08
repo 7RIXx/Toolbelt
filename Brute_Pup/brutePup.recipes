@@ -1,0 +1,144 @@
+88                                                        88888888ba                                                        
+88                                      ,d                88      "8b                                                       
+88                                      88                88      ,8P                                                       
+88,dPPYba,   8b,dPPYba,  88       88  MM88MMM  ,adPPYba,  88aaaaaa8P'  88       88  8b,dPPYba,                              
+88P'    "8a  88P'   "Y8  88       88    88    a8P_____88  88""""""'    88       88  88P'    "8a                             
+88       d8  88          88       88    88    8PP"""""""  88           88       88  88       d8                             
+88b,   ,a8"  88          "8a,   ,a88    88,   "8b,   ,aa  88           "8a,   ,a88  88b,   ,a8"                             
+8Y"Ybbd8"'   88           `"YbbdP'Y8    "Y888  `"Ybbd8"'  88            `"YbbdP'Y8  88`YbbdP"'                              
+88                           888888888888  88888888ba   88  8b        d8            88  ad88888ba                           
+88                                   ,8P'  88      "8b  88   Y8,    ,8P             88 d8"     "8b                          
+88                                  d8"    88      ,8P  88    `8b  d8'                 Y8,                                  
+88,dPPYba,   8b       d8          ,8P'     88aaaaaa8P'  88      Y88P      8b,     ,d8  `Y8aaaaa,     ,adPPYba,   ,adPPYba,  
+88P'    "8a  `8b     d8'         d8"       88""""88'    88      d88b       `Y8, ,8P'     `"""""8b,  a8P_____88  a8"     ""  
+88       d8   `8b   d8'        ,8P'        88    `8b    ""    ,8P  Y8,       )888(             `8b  8PP"""""""  8b          
+88b,   ,a8"    `8b,d8'        d8"          88     `8b   aa   d8'    `8b    ,d8" "8b,   Y8a     a8P  "8b,   ,aa  "8a,   ,aa  
+8Y"Ybbd8"'       Y88'        8P'           88      `8b  88  8P        Y8  8P'     `Y8   "Y88888P"    `"Ybbd8"'   `"Ybbd8"'  
+                 d8'                                                                                                        
+                d8'          
+		  _    _                                        _   _____           _              ____              _    
+		 | |  | |                                      | | |  __ \         (_)            |  _ \            | |   
+		 | |  | |___  __ _  __ _  ___    __ _ _ __   __| | | |__) |___  ___ _ _ __   ___  | |_) | ___   ___ | | __
+		 | |  | / __|/ _` |/ _` |/ _ \  / _` | '_ \ / _` | |  _  // _ \/ __| | '_ \ / _ \ |  _ < / _ \ / _ \| |/ /
+		 | |__| \__ \ (_| | (_| |  __/ | (_| | | | | (_| | | | \ \  __/ (__| | |_) |  __/ | |_) | (_) | (_) |   < 
+		  \____/|___/\__,_|\__, |\___|  \__,_|_| |_|\__,_| |_|  \_\___|\___|_| .__/ \___| |____/ \___/ \___/|_|\_\
+		                    __/ |                                            | |                                  
+		                   |___/                                             |_|                                  
+
+
+This document is NOT a substitute for reading the help menu. Based on the use of default settings, you will actually have to call 
+./brutePup.py -h to pull up the menu. 
+
+It is in that -h help menu that you can find how to do things like change your output folder/filenames, turn off the screenshotting
+feature, alter the top-level domain and ssl prefix passed around your search terms, and manipulate processing speeds.
+
+Generally speaking, your commands will output a 'data' folder and a 'screenshots' subfolder, within the data folder 'sites.live',
+'sites.errors', and 'sites.targetting' files will manifest. Dot Errors is for you wierdos who like combing through that stuff, Dot
+Live is a list of sites with SSL_Prefix and TLD attached for clicking or reports, and Dot Targetting is to be able to feed the list
+back into the tool if so desired.
+
+Keep in mind that the natural behaviour of the logging functions are to append if an output file is extant, so if you run the same
+command twice you will have a list twice as long with 50% duplicates. To avoid this either delete your data directory, or alter the
+-o flag every time.
+
+
+BASIC USAGE:
+
+	./brutePup.py
+	
+		This will launch the application with the default settings for a test run, bruteforcing all sites 1-2 characters
+		in length from character set a-z, check them for life, and snapshot any living ones.
+		
+	
+DO DIRECTORY BUSTING:
+
+	./brutePup.py -s MY_SITE_LIST_FILE -dr MY_DIRECTORY_WORDLIST_FILE 
+	
+		If you only want to test a single site for directories you will still need to put that single site into a wordlist
+		file and pass it in, but the tool is fully capable to accept a large list and test every directory against every
+		site if you so desire.
+	
+	
+TEST AGAINST CUSTOM SITE LIST:
+
+	./brutePup.py -s MY_SITE_LIST_FILE
+	
+		This will use a wordlist to check sites for life. The wordlist should be newline separated and only include the 
+		primary domain as a word, such as "google" "facebook" "microsoft", as the application will automatically add the 
+		SSL Prefix as well as the Top Level Domain.
+
+	
+DO A BASIC BRUTEFORCE ATTACK:
+
+	./brutePup.py -mn 2 -mn 3 -cs 0 -d 0.5
+	
+		This will bruteforce all character combinations of set a-z with lengths 2 and 3. All combinations will be passed as
+		sites and tested for life. The backend logic means that any dataset which is not quite small can be quite slow and
+		should be done by another method, as follows. The delay flag here speeds up the process a little bit, but play with
+		a larger dataset and you will see what is meant.
+	
+	
+DO A DISGUSTINGLY LARGE BRUTEFORCE ATTACK:
+
+	1) ./brutePup.py --redirection -mn 8 -mx 8 -cs 0
+	
+		This will bruteforce the list all possible eight character combinations of ascii.lowercase and 
+		pass it only into a file for later processing. You don't have to call --redirection, but this 
+		is the most efficient way to do large data sets without crashing.
+		
+		BE WARNED :: this has the potential to create and extremely large file on your disk, please be 
+				aware of the mathematics behind what you are asking this redirection function to 
+				do because it can easily be called to write multiple Petabytes of data into a file,
+				which for most of us is a ridiculous thought.
+	
+	2) ./brutePup.py -s data/sitelist.unchecked -v 
+	
+		Once the list is made, then pass it in as a custom sitelist. I like to do verbose here to monitor the progress.
+		If it keeps crashing mid-way then try using some command-line-magic to break this file into smaller chunks and 
+		run them one at a time. The default settings of the application will continue to append to your output file to 
+		keep things clean.
+		
+		Please also note that your living hits will not be recorded until after the main operations. If you CTR+C mid-way
+		it will log the results, if it finishes on its own it will log the results, but if the application crashes then
+		the results up to that point WILL NOT BE SAVED.
+	
+	
+USE BRUTEFORCE FEATURE TO PIPE INTO ANOTHER TOOL:
+
+	./brutePup.py -mn 4 -mx 4 -cs 2 -o /dev/null --redirection -v | MY_OTHER_TOOL.PY
+	
+		Redirection in combination with verbose will feed raw combinations into standard output, which can then be fed into
+		whatever else does the stuff. In this example, we are feeding all possible four-digit combinations into some type of
+		remote PIN cracking tool. Meanwhile, the general files created by the application's function are being piped into 
+		/dev/null for their immediate demapping.
+	
+
+CHECK A CUSTOM SITE LIST OF A CUSTOM CHARACTER SET:
+
+	1) ./brutePup.py -mn 3 -mx 3 -cs 'abc123^&*'
+	
+		This will create all combinations of abc123^&* in length of three, check them for life. We can then go and screenshot
+		the living results with ..
+
+	2) ./brutePup.py -s data/sites.targetting
+	
+		Keep in mind the parameters of your bruteforce, and that checking sites for life WHILE bruteforcing is not efficient;
+		the use of the redirection flag, as mentioned above, is a better way to do this, but this could still be practical in 
+		certain scenarios.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
