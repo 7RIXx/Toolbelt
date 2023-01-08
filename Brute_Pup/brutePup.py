@@ -327,7 +327,7 @@ if args.help is True:
 
 ### START EXECUTION ENVIRONMENT ###	
 	
-# create folder to hold things
+# create folder and files to hold things
 try:
 	os.mkdir(log_folder)
 
@@ -449,7 +449,7 @@ def live_logging(targets):
 	for site in living:
 		lf.write(str(site) + '\n')
 
-# build targetting list for further use
+# build targetting file for future use
 def target_logging(targets):
 	targetting = targets
 	slice_from = len(ssl_prefix)
@@ -513,9 +513,9 @@ if args.sitelist is not None and args.dirbust is not None:
 	try:
 		# check the things
 		print(pretty_banner)
-		#sleep(3)
+		sleep(2)
 		print('\n\n Busting directories, please be patient.. \n\n')
-		#sleep(0.5)
+		sleep(0.5)
 		dirbusting(sitelist,dirlist)
 		ping_site(dirbustinglist)
 		
@@ -530,7 +530,7 @@ if args.sitelist is not None and args.dirbust is not None:
 		
 	except KeyboardInterrupt:
 		print('\n\n User interruption \n\n')
-		exit()
+
 		
 # if dirlist was passed without sitelist then print help
 elif args.dirbust is not None and args.sitelist == None:
@@ -543,9 +543,9 @@ elif args.sitelist is not None and args.dirbust == None:
 	try:		
 		# check the things
 		print(pretty_banner)
-		#sleep(3)
+		sleep(2)
 		print('\n\n Pinging sitelist, please be patient.. \n\n')
-		#sleep(0.5)
+		sleep(0.5)
 		ping_site(sitelist)
 				
 		# snap the pics
@@ -566,9 +566,9 @@ elif args.sitelist == None and args.dirbust == None and args.redirection:
 	try:
 		# check the things
 		print(pretty_banner)
-		#sleep(3)
+		sleep(2)
 		print(f'\n\n Bruteforcing sites into {brute_direction}, please be patient.. \n\n')
-		#sleep(0.5)
+		sleep(0.5)
 		
 		try:
 			bd = open(brute_direction,'x')							
@@ -599,16 +599,16 @@ elif args.sitelist == None and args.dirbust == None and args.redirection:
 
 	except KeyboardInterrupt:
 		print('\n\n User interruption \n\n')
-		exit()
+
 
 # if neither sitelist nor dirlist was passed, and redirection not, then bruteforce across network					
 else:
 	try:
 		# check the things
 		print(pretty_banner)
-		#sleep(3)
+		sleep(2)
 		print('\n\n Checking bruteforced sites, please be patient.. \n\n')
-		#sleep(0.5)
+		sleep(0.5)
 		
 		for att in bruteforce():
 			try:
@@ -630,7 +630,7 @@ else:
 
 	except KeyboardInterrupt:
 		print('\n\n User interruption \n\n')
-		exit()
+
 		
 ### END MAIN EXECUTION SEQUENCE ###
 
