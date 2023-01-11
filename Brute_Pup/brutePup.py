@@ -83,11 +83,11 @@ help = '''
 
 Default Usage: ./brutePup.py
 
-Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -l | -sn | -v] 
+Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v] 
 			      
-			      -s -dr [-sn | -v]
+			      -s -dr [-t | -d | -o | -cs | -e | -sn | -v]
 			      
-			      --redirection
+			      --redirection [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v]
 			      
 			      -h
 
