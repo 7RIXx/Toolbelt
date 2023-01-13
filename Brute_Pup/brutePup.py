@@ -78,10 +78,9 @@ pretty_banner = '''
 '''
 
 
-
 help = '''
 
-Default Usage: ./brutePup.py
+Basic Usage: ./brutePup.py
 
 Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v] 
 			      
@@ -89,11 +88,21 @@ Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v
 			      
 			      --redirection [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v]
 			      
+			      -f -s [-t | -d | -o | -e | -sn | -v]
+			      
 			      -h
 
 	-t, --threads :: Run multi-threaded requests (Default: 100)
 	                |
 	                |__/\_  Recommended range: 1-250 (as tested on Intel i7x8)
+	                
+	-f, --fuzz :: Fuzz some things. Accepts a string that has the site in it
+	                |
+	                |__/\_ Place BRUTEPUP where you want to fuzz
+	                
+	                	 eg. 'https://BRUTEPUP.google.com'                
+	                
+	-w, --wordlist :: Wordlist for fuzzer (Accepts a string pointing to the location of the list)
 	
 	-s, --sitelist :: Pass a wordlist instead of bruteforcing sites
 	                |
@@ -101,7 +110,7 @@ Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v
 	                
 	                	Entries should be domain name only, do not include SSL/TLD
 	                	
-	                		Eg. "google"
+	                		eg. "google"
 	                		
 	-sn, --snap :: Screenshot sites
 	
@@ -169,6 +178,7 @@ Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v
 '''
 
 
+
 set_min = 1
 set_max = 2
 
@@ -184,6 +194,8 @@ live_tar = []
 sitelist = []
 dirlist = []
 dirbustinglist = []
+fuzz_words = []
+fuzz_tars = []
 snap = False
 ssl_prefix = 'https://'
 tld = '.com'
@@ -202,6 +214,8 @@ targetting_file = log_folder + '/' + 'sites' + '.targetting'
 parser = argparse.ArgumentParser(add_help=False)
 
 parser.add_argument('-t', '--threads', type=int)
+parser.add_argument('-f', '--fuzz', type=str)
+parser.add_argument('-w', '--wordlist', type=str)
 parser.add_argument('-s', '--sitelist', type=str)
 parser.add_argument('-sn', '--snap', action='store_true')
 parser.add_argument('-ssl', '--secure', type=str)
@@ -222,7 +236,9 @@ args = parser.parse_args()
 
 if args.threads is not None:
 	threadlimit = args.threads
-
+if args.fuzz is not None and args.wordlist == None or args.wordlist is not None and args.fuzz == None:
+	print(help)
+	exit()
 if args.snap:
 	snap = True
 if args.secure is not None:
@@ -494,6 +510,38 @@ def dirbusting(site_targets,dir_targets):
 		for di in dirs:
 			bustar = si + tld + di
 			dirbustinglist.append(bustar)
+			
+			
+			
+			
+#fuzz_words
+# fuzz the words
+
+def get_fuzz_words():
+	location = str(args.wordlist)
+	with open(location,'r') as fw:
+		for word in fw:
+			fuzz_words.append(word)
+			
+def fuzzer():
+	target = args.fuzz
+	seeker = list(args.fuzz)
+	located = 0
+	pre = ''
+	post = ''
+	# find the fuzz location
+	# iterate through string until trigger term is found; save location
+	for x in range(len(target)):
+		if ''.join(seeker[x:x+8]) == 'BRUTEPUP':
+			located = x
+			pre = ''.join(seeker[:located])
+			post = ''.join(seeker[located+8:])
+	# prepare the fuzzing list
+	for y in range(len(fuzz_words)):
+		target = pre + fuzz_words[y].strip() + post		
+		fuzz_tars.append(target)
+		
+
 
 ### END CRAFT PRIMARY UTILITIES ###
 
@@ -516,6 +564,7 @@ if args.sitelist is not None and args.dirbust is not None:
 		sleep(2)
 		print('\n\n Busting directories, please be patient.. \n\n')
 		sleep(0.5)
+
 		dirbusting(sitelist,dirlist)
 		ping_site(dirbustinglist)
 		
@@ -530,7 +579,32 @@ if args.sitelist is not None and args.dirbust is not None:
 		
 	except KeyboardInterrupt:
 		print('\n\n User interruption \n\n')
+		
+# if fuzzing is invoked, do it
+elif args.fuzz is not None and args.wordlist is not None:
+	try:
+		# get furry.. er.. fuzzy..
+		print(pretty_banner)
+		sleep(2)
+		print('\n\n Fuzzing the goods, please be patient.. \n\n')
+		sleep(0.5)
+		
+		get_fuzz_words()
+		fuzzer()
+		ping_site(fuzz_tars)
 
+		# snap the pics
+		if snap:
+			print('\n\n Snapping shots, please be patient.. \n\n')
+			sleep(1)
+			snapshot(live_tar)			
+			
+
+		print(f'\n\n Task complete, data stored in directory {log_folder} \n\n')
+		
+	except KeyboardInterrupt:
+		print('\n\n User interruption \n\n')
+		
 		
 # if dirlist was passed without sitelist then print help
 elif args.dirbust is not None and args.sitelist == None:
