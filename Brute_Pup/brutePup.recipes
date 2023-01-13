@@ -127,10 +127,30 @@ CHECK A CUSTOM SITE LIST OF A CUSTOM CHARACTER SET:
 		certain scenarios.
 	
 	
+FUZZ THINGS:
+
+	./brutePup.py -f 'https://BRUTEPUP.google.com' -w words
 	
+		File words contains words like mail, drive, dev, vpn et cetera
+		
+		BRUTEPUP must be capitalized
+		
+	./brutePup.py -f 'https://BRUTEPUPporn.com' -w words
 	
+		Doesn't have to be subdomains, could even be planted mid-word like:
+		
+			unitedstatBRUTEPUPesgovernment
+		
+		
+USE THE FUZZER FOR MORE GRANULAR CONTROL OVER TARGETS:
+
+	./brutePup.py -f 'whyThis://BRUTEPUP.idontknow' -w words
 	
+	./brutePup.py -f 'https://BRUTEPUP.com' -w words
 	
+	./brutePup.py -f 'https://dankmemes.BRUTEPUP' -w words
+	
+		If you're running into an issue with the non-fuzzing parts of the tool, then try to fuzz your results instead. This could, for example, override the 6 character maximum on the custom top level domain'
 	
 	
 	
