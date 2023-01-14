@@ -166,7 +166,21 @@ FUZZ THINGS YOU DON'T EVEN KNOW ABOUT!
 		Use the generated wordlist as your fuzzing words. Of note that the dot
 		unchecked as well as the dot targetting files would be interchangeable 
 		here.
+
+
+CHECK AUXILIARY PORTS:
+
+	./brutePup.py -f 'http://BRUTEPUP.me:8080' -w sites
 	
+		I successfully used this on the THM Ironcorp room and received a live target
+		of the application sitting on 8080. In this case my list only has a single
+		word in it, my desired target site, but it could be more if desired.
+		
+		If I wanted to check other ports for applications then I would make a wordlist
+		with port numbers in it and call:
+		
+	./brutePup.py -f 'http://ironcorp.me:BRUTEPUP' -w ports_list
+		
 	
 	
 	
