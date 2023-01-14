@@ -154,7 +154,18 @@ USE THE FUZZER FOR MORE GRANULAR CONTROL OVER TARGETS:
 	
 	
 	
+FUZZ THINGS YOU DON'T EVEN KNOW ABOUT!
+
+	1) ./brutePup.py --redirection -mn 3 -mx 5 -cs 3210 
 	
+		Generate a list of all combinations in lower/upper/number/symbol set
+		that are 3-5 characters in length, and save them to a file
+		
+	2) ./brutePup.py -f 'https://BRUTEPUP.facebook.com' -w data/sitelist.unchecked
+	
+		Use the generated wordlist as your fuzzing words. Of note that the dot
+		unchecked as well as the dot targetting files would be interchangeable 
+		here.
 	
 	
 	
