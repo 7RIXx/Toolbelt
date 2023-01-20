@@ -15,15 +15,13 @@ Then I started really getting in the zone with features and it reached a certain
 '''
 POTENTIAL EVOLUTIONS LIST
 
-1) Add a fuzzing option
+1) Add a progress bar
 
-2) Add a progress bar
+2) Add a pause/resume feature (like Feroxbuster) or maybe just a brutePup.state file
 
-3) Add a pause/resume feature (like Feroxbuster) or maybe just a brutePup.state file
+3) For output file globals use some type of string formatting to allow greater flexibility in combinations and granular control
 
-4) For output file globals use some type of string formatting to allow greater flexibility in combinations and granular control
-
-5) Add optionality to pipe into TOR
+4) Add optionality to pipe into TOR
 
 '''
 
@@ -82,13 +80,13 @@ help = '''
 
 Basic Usage: ./brutePup.py
 
-Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v] 
+Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v | -q] 
 			      
-			      -s -dr [-t | -d | -o | -cs | -e | -sn | -v]
+			      -s -dr [-t | -d | -o | -cs | -e | -sn | -v | -q]
 			      
-			      --redirection [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v]
+			      --redirection [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v | -q]
 			      
-			      -f -s [-t | -d | -o | -e | -sn | -v]
+			      -f -s [-t | -d | -o | -e | -sn | -v | -q]
 			      
 			      -h
 
@@ -173,6 +171,8 @@ Extended Usage: ./brutePup.py -s [-t | -mn | -mx | -d | -o | -cs | -e | -sn | -v
 	                	
 	-v, --verbose :: Watch your screen fill up with all the $1cK requests you're making!
 
+	-q, --quick :: skip banner and disable all aesthetic sleep delays
+	
 	-h, --help :: Show this display
 
 '''
@@ -185,17 +185,9 @@ set_max = 2
 timeoutdelay = 1
 threadlimit = 100
 error_queue = []
-error_report = {}
 
 char_set = list(little_letters)
-tmp_list = []
-set_list = []
-live_tar = []
-sitelist = []
-dirlist = []
-dirbustinglist = []
-fuzz_words = []
-fuzz_tars = []
+tmp_list, set_list, live_tar, sitelist, dirlist, dirbustinglist, fuzz_words, fuzz_tars = [], [], [], [], [], [], [], []
 snap = False
 ssl_prefix = 'https://'
 tld = '.com'
@@ -229,6 +221,7 @@ parser.add_argument('-e', '--errorfile', type=str)
 parser.add_argument('--redirection', action='store_true')
 parser.add_argument('-dr', '--dirbust', type=str)
 parser.add_argument('-v', '--verbose', action='store_true')
+parser.add_argument('-q', '--quick', action='store_true')
 parser.add_argument('-h', '--help', action='store_true')
 
 # parse passed argumentation
@@ -359,7 +352,8 @@ except OSError as er:
 		
 		\n\n''')
 		
-		sleep(3)
+		if not args.quick:
+			sleep(3)
 		
 
 try:
@@ -520,8 +514,17 @@ def dirbusting(site_targets,dir_targets):
 def get_fuzz_words():
 	location = str(args.wordlist)
 	with open(location,'r') as fw:
+		fw.seek(0)
 		for word in fw:
-			fuzz_words.append(word)
+			word = str(word)
+			try:
+				fuzz_words.append(word)
+			except UnicodeDecodeError:
+				print('''\n\n Unicode Decode Error, please save your passed file
+					      with UTF-8 encoding \n\n''')
+			
+			except:
+				continue
 			
 def fuzzer():
 	target = args.fuzz
@@ -560,19 +563,25 @@ startit = datetime.now()
 if args.sitelist is not None and args.dirbust is not None:
 	try:
 		# check the things
-		print(pretty_banner)
-		sleep(2)
+		if not args.quick:
+			print(pretty_banner)
+			sleep(2)
+	
 		print('\n\n Busting directories, please be patient.. \n\n')
-		sleep(0.5)
+	
+		if not args.quick:
+			sleep(0.5)
 
 		dirbusting(sitelist,dirlist)
 		ping_site(dirbustinglist)
 		
 		# snap the pics
 		if snap:
-			print('\n\n Snapping shots, please be patient.. \n\n')
-			sleep(1)
-			snapshot(live_tar)
+			try:
+				print('\n\n Snapping shots, please be patient.. \n\n')							
+				snapshot(live_tar)
+			except KeyboardInterrupt:
+				pass
 			
 
 		print(f'\n\n Task complete, data stored in directory {log_folder} \n\n')
@@ -584,10 +593,14 @@ if args.sitelist is not None and args.dirbust is not None:
 elif args.fuzz is not None and args.wordlist is not None:
 	try:
 		# get furry.. er.. fuzzy..
-		print(pretty_banner)
-		sleep(2)
+		if not args.quick:
+			print(pretty_banner)
+			sleep(2)
+		
 		print('\n\n Fuzzing the goods, please be patient.. \n\n')
-		sleep(0.5)
+		
+		if not args.quick:
+			sleep(0.5)
 		
 		get_fuzz_words()
 		fuzzer()
@@ -595,9 +608,11 @@ elif args.fuzz is not None and args.wordlist is not None:
 
 		# snap the pics
 		if snap:
-			print('\n\n Snapping shots, please be patient.. \n\n')
-			sleep(1)
-			snapshot(live_tar)			
+			try:
+				print('\n\n Snapping shots, please be patient.. \n\n')							
+				snapshot(live_tar)
+			except KeyboardInterrupt:
+				pass		
 			
 
 		print(f'\n\n Task complete, data stored in directory {log_folder} \n\n')
@@ -616,10 +631,15 @@ elif args.sitelist is not None and args.dirbust == None:
 
 	try:		
 		# check the things
-		print(pretty_banner)
-		sleep(2)
+		if not args.quick:
+			print(pretty_banner)
+			sleep(2)
+		
 		print('\n\n Pinging sitelist, please be patient.. \n\n')
-		sleep(0.5)
+		
+		if not args.quick:
+			sleep(0.5)
+
 		ping_site(sitelist)
 				
 		# snap the pics
@@ -639,10 +659,14 @@ elif args.sitelist is not None and args.dirbust == None:
 elif args.sitelist == None and args.dirbust == None and args.redirection:
 	try:
 		# check the things
-		print(pretty_banner)
-		sleep(2)
+		if not args.quick:
+			print(pretty_banner)
+			sleep(2)
+		
 		print(f'\n\n Bruteforcing sites into {brute_direction}, please be patient.. \n\n')
-		sleep(0.5)
+		
+		if not args.quick:
+			sleep(0.5)
 		
 		try:
 			bd = open(brute_direction,'x')							
@@ -679,10 +703,14 @@ elif args.sitelist == None and args.dirbust == None and args.redirection:
 else:
 	try:
 		# check the things
-		print(pretty_banner)
-		sleep(2)
+		if not args.quick:
+			print(pretty_banner)
+			sleep(2)
+
 		print('\n\n Checking bruteforced sites, please be patient.. \n\n')
-		sleep(0.5)
+
+		if not args.quick:
+			sleep(0.5)
 		
 		for att in bruteforce():
 			try:
