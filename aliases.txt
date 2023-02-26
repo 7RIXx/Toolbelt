@@ -1,0 +1,33 @@
+# Update environment
+alias gerc='gedit ~/.bashrc'
+alias nerc='nano ~/.bashrc'
+alias serc='source ~/.bashrc'
+
+# Smash screenshots
+alias fsg='flameshot gui'
+
+# Look at and manipulate things
+alias lls='ls -l'
+alias lla='ls -la'
+alias la='ls -a'
+alias rmr='rm -r'
+alias chmods='chmod 750'
+alias cdh='cd ~'
+
+# Take quick notes
+alias enln='echo >> notes && echo $2 >> notes'
+
+# Check the network
+alias pingw='ping -c 2 -w 2'
+alias pingw1='ping -c 2 -w 2 1.1.1.1'
+alias pingw8='ping -c 2 -w 2 8.8.8.8'
+alias pingwf='ping -c 2 -w 2 facebook.com'
+alias pingwg='ping -c 2 -w 2 google.com'
+
+# Lookup stuff
+alias hashpot='cat ~/.local/share/hashcat/hashcat.potfile'
+alias hashgrep='cat ~/.local/share/hashcat/hashcat.potfile | grep'
+
+# Custom tools
+alias bp='brutePup.py'
+
