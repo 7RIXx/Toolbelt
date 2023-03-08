@@ -31,6 +31,7 @@ alias hashgrep='cat ~/.local/share/hashcat/hashcat.potfile | grep'
 
 # Custom tools
 alias bp='brutePup.py'
+alias cs='cyberS.py'
 
 # This one is so I can save a working IP to a file and quickly pipe it into a command
 # Note that those are backticks nested in quotes, and that the filename I store IP in is 'IP'
