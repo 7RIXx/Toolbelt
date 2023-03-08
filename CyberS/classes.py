@@ -229,7 +229,13 @@ class mapper():
 			for item in self.map_dict_data.keys():
 				if item in self.h_filter:
 					for meti in self.map_dict_data[item].items():
-						print(meti)
+						print(f'''
+						
+	{item}
+	
+		{meti}
+						
+						''')
 						print('\n')
 			
 			
