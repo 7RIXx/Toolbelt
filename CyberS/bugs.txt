@@ -1,0 +1,11 @@
+'''
+
+Known Issues with cyberS
+
+'''
+
+1) Doesn't work against Windows hosts ?
+
+2) KeyboardInterrupt only interrupts the individual probe, not the whole process
+
+3)
