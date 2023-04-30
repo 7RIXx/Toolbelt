@@ -17,6 +17,7 @@ alias lns='ln -s'
 
 # Take quick notes
 alias enln='echo >> notes && echo $2 >> notes'
+alias cnot='cat notes'
 
 # Check the network
 alias pingw='ping -c 2 -w 2'
